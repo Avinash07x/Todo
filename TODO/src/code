@@ -1,0 +1,352 @@
+// import React, { useState } from 'react';
+// import { Sun, Moon, Menu, X, Bell, Search, User, Settings } from 'lucide-react';
+
+// // Header Component with full functionality
+// function Header({ isDarkMode, toggleDarkMode, currentPage, setCurrentPage }) {
+//   const [isMenuOpen, setIsMenuOpen] = useState(false);
+//   const [isProfileOpen, setIsProfileOpen] = useState(false);
+//   const [searchQuery, setSearchQuery] = useState('');
+//   const [notifications] = useState([
+//     { id: 1, message: "You have 3 pending tasks", time: "2 min ago" },
+//     { id: 2, message: "Task 'Buy groceries' is overdue", time: "1 hour ago" },
+//     { id: 3, message: "Weekly report completed", time: "3 hours ago" }
+//   ]);
+//   const [showNotifications, setShowNotifications] = useState(false);
+
+//   const navItems = [
+//     { id: 'home', label: 'Home' },
+//     { id: 'todos', label: 'My Todos' },
+//     { id: 'analytics', label: 'Analytics' },
+//     { id: 'calendar', label: 'Calendar' },
+//     { id: 'profile', label: 'Profile' },
+//     { id: 'settings', label: 'Settings' }
+//   ];
+
+//   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+//   const toggleProfile = () => setIsProfileOpen(!isProfileOpen);
+//   const toggleNotifications = () => setShowNotifications(!showNotifications);
+
+//   return (
+//     <>
+//       {/* Header */}
+//       <header className={`sticky top-0 z-50 rounded-xl shadow-lg mb-6 transition-all duration-300 ${
+//         isDarkMode 
+//           ? 'bg-gray-800/95 border border-gray-700 backdrop-blur-sm' 
+//           : 'bg-white/95 backdrop-blur-sm border border-gray-200'
+//       }`}>
+//         <div className="px-6 py-4">
+//           <div className="flex items-center justify-between">
+            
+//             {/* Logo & Brand */}
+//             <div className="flex items-center space-x-4">
+//               <div className={`flex items-center space-x-3 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+//                 <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+//                   <span className="text-white font-bold text-lg">T</span>
+//                 </div>
+//                 <div>
+//                   <h1 className="text-xl font-bold">Todo Master</h1>
+//                   <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+//                     Stay Organized, Stay Productive
+//                   </p>
+//                 </div>
+//               </div>
+//             </div>
+
+//             {/* Desktop Navigation */}
+//             <nav className="hidden lg:flex items-center space-x-2">
+//               {navItems.map(item => (
+//                 <button
+//                   key={item.id}
+//                   onClick={() => setCurrentPage(item.id)}
+//                   className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 ${
+//                     currentPage === item.id
+//                       ? (isDarkMode 
+//                           ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25' 
+//                           : 'bg-blue-500 text-white shadow-lg shadow-blue-400/25'
+//                         )
+//                       : (isDarkMode 
+//                           ? 'text-gray-300 hover:bg-gray-700 hover:text-white' 
+//                           : 'text-gray-600 hover:bg-gray-100 hover:text-gray-800'
+//                         )
+//                   }`}
+//                 >
+//                   {item.label}
+//                 </button>
+//               ))}
+//             </nav>
+
+//             {/* Right Side Actions */}
+//             <div className="flex items-center space-x-3">
+              
+//               {/* Search Bar */}
+//               <div className="hidden md:block relative">
+//                 <div className="relative">
+//                   <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 ${
+//                     isDarkMode ? 'text-gray-400' : 'text-gray-500'
+//                   }`} />
+//                   <input
+//                     type="text"
+//                     placeholder="Search todos..."
+//                     value={searchQuery}
+//                     onChange={(e) => setSearchQuery(e.target.value)}
+//                     className={`pl-10 pr-4 py-2 w-64 rounded-lg border transition-all duration-200 focus:ring-2 focus:border-transparent outline-none ${
+//                       isDarkMode 
+//                         ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:ring-blue-500'
+//                         : 'bg-white border-gray-300 text-gray-700 placeholder-gray-500 focus:ring-blue-500'
+//                     }`}
+//                   />
+//                 </div>
+//               </div>
+
+//               {/* Notifications */}
+//               <div className="relative">
+//                 <button
+//                   onClick={toggleNotifications}
+//                   className={`p-2 rounded-lg transition-all duration-200 hover:scale-110 relative ${
+//                     isDarkMode 
+//                       ? 'text-gray-300 hover:bg-gray-700 hover:text-white' 
+//                       : 'text-gray-600 hover:bg-gray-100 hover:text-gray-800'
+//                   }`}
+//                 >
+//                   <Bell className="w-5 h-5" />
+//                   {notifications.length > 0 && (
+//                     <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center animate-pulse">
+//                       {notifications.length}
+//                     </span>
+//                   )}
+//                 </button>
+
+//                 {/* Notifications Dropdown */}
+//                 {showNotifications && (
+//                   <div className={`absolute right-0 mt-2 w-80 rounded-lg shadow-2xl border z-50 ${
+//                     isDarkMode 
+//                       ? 'bg-gray-800 border-gray-700' 
+//                       : 'bg-white border-gray-200'
+//                   }`}>
+//                     <div className="p-4">
+//                       <h3 className={`text-lg font-semibold mb-3 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+//                         Notifications
+//                       </h3>
+//                       <div className="space-y-3">
+//                         {notifications.map(notification => (
+//                           <div key={notification.id} className={`p-3 rounded-lg ${
+//                             isDarkMode ? 'bg-gray-700 hover:bg-gray-650' : 'bg-gray-50 hover:bg-gray-100'
+//                           } transition-colors duration-200`}>
+//                             <p className={`text-sm ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+//                               {notification.message}
+//                             </p>
+//                             <p className={`text-xs mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+//                               {notification.time}
+//                             </p>
+//                           </div>
+//                         ))}
+//                       </div>
+//                       <button className={`w-full mt-3 py-2 rounded-lg transition-colors duration-200 ${
+//                         isDarkMode 
+//                           ? 'bg-blue-600 hover:bg-blue-700 text-white' 
+//                           : 'bg-blue-500 hover:bg-blue-600 text-white'
+//                       }`}>
+//                         Mark all as read
+//                       </button>
+//                     </div>
+//                   </div>
+//                 )}
+//               </div>
+
+//               {/* Dark/Light Mode Toggle */}
+//               <button
+//                 onClick={toggleDarkMode}
+//                 className={`p-2 rounded-lg transition-all duration-300 transform hover:scale-110 hover:rotate-12 ${
+//                   isDarkMode
+//                     ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-300 shadow-lg hover:shadow-yellow-400/50'
+//                     : 'bg-gray-800 text-white hover:bg-gray-700 shadow-lg hover:shadow-gray-800/50'
+//                 }`}
+//                 title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+//               >
+//                 {isDarkMode ? (
+//                   <Sun className="w-5 h-5" />
+//                 ) : (
+//                   <Moon className="w-5 h-5" />
+//                 )}
+//               </button>
+
+//               {/* Profile Dropdown */}
+//               <div className="relative">
+//                 <button
+//                   onClick={toggleProfile}
+//                   className={`flex items-center space-x-2 p-2 rounded-lg transition-all duration-200 hover:scale-105 ${
+//                     isDarkMode 
+//                       ? 'text-gray-300 hover:bg-gray-700 hover:text-white' 
+//                       : 'text-gray-600 hover:bg-gray-100 hover:text-gray-800'
+//                   }`}
+//                 >
+//                   <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+//                     <User className="w-4 h-4 text-white" />
+//                   </div>
+//                   <span className="hidden sm:block">John Doe</span>
+//                 </button>
+
+//                 {/* Profile Dropdown Menu */}
+//                 {isProfileOpen && (
+//                   <div className={`absolute right-0 mt-2 w-48 rounded-lg shadow-2xl border z-50 ${
+//                     isDarkMode 
+//                       ? 'bg-gray-800 border-gray-700' 
+//                       : 'bg-white border-gray-200'
+//                   }`}>
+//                     <div className="py-2">
+//                       <a href="#" className={`block px-4 py-2 text-sm transition-colors duration-200 ${
+//                         isDarkMode 
+//                           ? 'text-gray-300 hover:bg-gray-700 hover:text-white' 
+//                           : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+//                       }`}>
+//                         View Profile
+//                       </a>
+//                       <a href="#" className={`block px-4 py-2 text-sm transition-colors duration-200 ${
+//                         isDarkMode 
+//                           ? 'text-gray-300 hover:bg-gray-700 hover:text-white' 
+//                           : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+//                       }`}>
+//                         Account Settings
+//                       </a>
+//                       <a href="#" className={`block px-4 py-2 text-sm transition-colors duration-200 ${
+//                         isDarkMode 
+//                           ? 'text-gray-300 hover:bg-gray-700 hover:text-white' 
+//                           : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
+//                       }`}>
+//                         Help & Support
+//                       </a>
+//                       <div className="border-t border-gray-200 dark:border-gray-700 my-1"></div>
+//                       <a href="#" className="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors duration-200">
+//                         Sign Out
+//                       </a>
+//                     </div>
+//                   </div>
+//                 )}
+//               </div>
+
+//               {/* Mobile Menu Button */}
+//               <button
+//                 onClick={toggleMenu}
+//                 className={`lg:hidden p-2 rounded-lg transition-all duration-200 ${
+//                   isDarkMode 
+//                     ? 'text-gray-300 hover:bg-gray-700 hover:text-white' 
+//                     : 'text-gray-600 hover:bg-gray-100 hover:text-gray-800'
+//                 }`}
+//               >
+//                 {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+//               </button>
+//             </div>
+//           </div>
+
+//           {/* Mobile Search */}
+//           <div className="md:hidden mt-4">
+//             <div className="relative">
+//               <Search className={`absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 ${
+//                 isDarkMode ? 'text-gray-400' : 'text-gray-500'
+//               }`} />
+//               <input
+//                 type="text"
+//                 placeholder="Search todos..."
+//                 value={searchQuery}
+//                 onChange={(e) => setSearchQuery(e.target.value)}
+//                 className={`pl-10 pr-4 py-2 w-full rounded-lg border transition-all duration-200 focus:ring-2 focus:border-transparent outline-none ${
+//                   isDarkMode 
+//                     ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:ring-blue-500'
+//                     : 'bg-white border-gray-300 text-gray-700 placeholder-gray-500 focus:ring-blue-500'
+//                 }`}
+//               />
+//             </div>
+//           </div>
+//         </div>
+
+//         {/* Mobile Navigation Menu */}
+//         {isMenuOpen && (
+//           <div className={`lg:hidden border-t ${
+//             isDarkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-200 bg-white'
+//           }`}>
+//             <div className="px-6 py-4 space-y-2">
+//               {navItems.map(item => (
+//                 <button
+//                   key={item.id}
+//                   onClick={() => {
+//                     setCurrentPage(item.id);
+//                     setIsMenuOpen(false);
+//                   }}
+//                   className={`block w-full text-left px-4 py-3 rounded-lg font-medium transition-all duration-200 ${
+//                     currentPage === item.id
+//                       ? (isDarkMode 
+//                           ? 'bg-blue-600 text-white' 
+//                           : 'bg-blue-500 text-white'
+//                         )
+//                       : (isDarkMode 
+//                           ? 'text-gray-300 hover:bg-gray-700 hover:text-white' 
+//                           : 'text-gray-600 hover:bg-gray-100 hover:text-gray-800'
+//                         )
+//                   }`}
+//                 >
+//                   {item.label}
+//                 </button>
+//               ))}
+//             </div>
+//           </div>
+//         )}
+//       </header>
+
+//       {/* Click outside handlers */}
+//       {(showNotifications || isProfileOpen) && (
+//         <div 
+//           className="fixed inset-0 z-40" 
+//           onClick={() => {
+//             setShowNotifications(false);
+//             setIsProfileOpen(false);
+//           }}
+//         />
+//       )}
+//     </>
+//   );
+// }
+
+// // Demo App to showcase the header
+// export default function HeaderDemo() {
+//   const [isDarkMode, setIsDarkMode] = useState(false);
+//   const [currentPage, setCurrentPage] = useState('home');
+
+//   const toggleDarkMode = () => setIsDarkMode(!isDarkMode);
+
+//   return (
+//     <div className={`min-h-screen transition-all duration-500 ${
+//       isDarkMode 
+//         ? 'bg-gray-900' 
+//         : 'bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50'
+//     }`}>
+//       <div className="max-w-7xl mx-auto p-6">
+//         <Header 
+//           isDarkMode={isDarkMode}
+//           toggleDarkMode={toggleDarkMode}
+//           currentPage={currentPage}
+//           setCurrentPage={setCurrentPage}
+//         />
+        
+//         {/* Page Content */}
+//         <div className={`rounded-xl shadow-lg p-8 text-center ${
+//           isDarkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white'
+//         }`}>
+//           <h2 className={`text-3xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+//             {currentPage.charAt(0).toUpperCase() + currentPage.slice(1)} Page
+//           </h2>
+//           <p className={`text-lg ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+//             This is the {currentPage} page content. The header above contains:
+//           </p>
+//           <ul className={`mt-4 text-left max-w-md mx-auto space-y-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+//             <li>• Responsive navigation with mobile menu</li>
+//             <li>• Search functionality</li>
+//             <li>• Notification system with badge</li>
+//             <li>• Dark/Light mode toggle</li>
+//             <li>• Profile dropdown menu</li>
+//             <li>• Smooth animations and transitions</li>
+//           </ul>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
