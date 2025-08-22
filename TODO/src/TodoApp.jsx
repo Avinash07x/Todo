@@ -113,7 +113,7 @@ function TodoApp() {
   return (
     <>
       <style>{vibrateKeyframes}</style>
-      <div className={`min-h-screen py-4 px-3 transition-all duration-500 ${
+      <div className={`min-h-screen py-20 px-3 transition-all duration-500 ${
         isDarkMode ? 'bg-gray-900' : 'bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50'
       }`}>
         <div className={`max-w-3xl mx-auto rounded-2xl p-4 shadow-2xl border transition-all duration-500 ${
@@ -131,9 +131,12 @@ function TodoApp() {
           </div>
 
           <Header isDarkMode={isDarkMode} />
-          <AddTodoInput {...{ inputValue, setInputValue, addTodo, error, setError, isDarkMode }} />
-          <StatsAndFilters {...{ pendingCount, activeCount, completedCount, filter, setFilter, isDarkMode, showFilters, setShowFilters }} />
-          <TodoList {...{ filteredTodos, editingId, editValue, setEditValue, editError, saveEdit, cancelEdit, toggleStatus, startEdit, deleteTodo, isDarkMode }} />
+          <AddTodoInput
+          inputValue={inputValue} setInputValue={setInputValue} addTodo={addTodo} error={error} setError={setError} isDarkMode={isDarkMode} />
+          <StatsAndFilters
+          pendingCount={pendingCount} activeCount={activeCount} completedCount={completedCount} filter={filter} setFilter={setFilter} isDarkMode={isDarkMode} showFilters={showFilters} setShowFilters={setShowFilters}/>
+          <TodoList
+          filteredTodos={filteredTodos} editingId={editingId} editValue={editValue} setEditValue={setEditValue} editError={editError} saveEdit={saveEdit} cancelEdit={cancelEdit} toggleStatus={toggleStatus} startEdit={startEdit} deleteTodo={deleteTodo} isDarkMode={isDarkMode} />
 
           {completedCount > 0 && (
             <div className="mt-4 text-center">

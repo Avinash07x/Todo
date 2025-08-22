@@ -1,5 +1,5 @@
+import React from 'react';
 import { Plus } from 'lucide-react';
-
 
 function AddTodoInput({ inputValue, setInputValue, addTodo, error, setError, isDarkMode }) {
   return (
@@ -27,7 +27,7 @@ function AddTodoInput({ inputValue, setInputValue, addTodo, error, setError, isD
         />
         <button
           onClick={addTodo}
-          className={`vibrate-btn px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-all duration-300 ease-in-out flex items-center justify-center sm:justify-start gap-2 transform hover:scale-105 hover:-translate-y-1 hover:shadow-lg active:scale-95 group text-sm sm:text-base ${
+          className={`px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium transition-all flex items-center justify-center gap-2 transform hover:scale-105 hover:-translate-y-1 hover:shadow-lg active:scale-95 group text-sm sm:text-base ${
             isDarkMode 
               ? 'bg-blue-600 hover:bg-blue-700 text-white hover:shadow-blue-500/25' 
               : 'bg-blue-500 hover:bg-blue-600 text-white hover:shadow-blue-400/25'
@@ -35,11 +35,9 @@ function AddTodoInput({ inputValue, setInputValue, addTodo, error, setError, isD
         >
           <Plus 
             size={18} 
-            className="transition-all duration-300 ease-in-out group-hover:rotate-90 group-hover:scale-110" 
+            className="transition-all group-hover:rotate-90 group-hover:scale-110" 
           />
-          <span className="transition-all duration-300 ease-in-out group-hover:tracking-wide">
-            Add
-          </span>
+          <span className="group-hover:tracking-wide">Add</span>
         </button>
       </div>
       {error && (
