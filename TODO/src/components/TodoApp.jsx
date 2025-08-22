@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Sun, Moon } from 'lucide-react';
 import Header from './Header';
 import AddTodoInput from './AddTodoInput';
@@ -7,7 +7,12 @@ import TodoList from './TodoList';
 import Footer from './Footer';
 
 function TodoApp() {
-  const [todos, setTodos] = useState([]);
+  // ✅ LocalStorage से todos load
+  const [todos, setTodos] = useState(() => {
+    const savedTodos = localStorage.getItem("todos");
+    return savedTodos ? JSON.parse(savedTodos) : [];
+  });
+
   const [inputValue, setInputValue] = useState('');
   const [editingId, setEditingId] = useState(null);
   const [editValue, setEditValue] = useState('');
@@ -16,6 +21,11 @@ function TodoApp() {
   const [editError, setEditError] = useState('');
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+
+  // ✅ todos को हर बदलाव पर LocalStorage में save करना
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos]);
 
   // CSS keyframes for vibrate animation
   const vibrateKeyframes = `
