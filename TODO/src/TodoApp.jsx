@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Sun, Moon } from 'lucide-react';
-import Header from './Header';
-import AddTodoInput from './AddTodoInput';
-import StatsAndFilters from './StatsAndFilters';
-import TodoList from './TodoList';
-import Footer from './Footer';
+import Header from './components/Header';
+import AddTodoInput from './components/AddTodoInput';
+import StatsAndFilters from './components/StatsAndFilters';
+import TodoList from './components/TodoList';
+import Footer from './components/Footer';
 
 function TodoApp() {
   // ✅ LocalStorage से todos load
