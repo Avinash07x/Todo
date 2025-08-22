@@ -1,12 +1,12 @@
-import React from 'react';
-import TodoApp from './TodoApp';
+import React from "react";
+import TodoApp from "./TodoApp";
 
 const App = () => {
   return (
     <div>
       <TodoApp />
-/    </div>
-  )
-}
+    </div>
+  );
+};
 
 export default App;

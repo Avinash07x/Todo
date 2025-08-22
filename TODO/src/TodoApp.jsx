@@ -7,7 +7,6 @@ import TodoList from './components/TodoList';
 import Footer from './components/Footer';
 
 function TodoApp() {
-  // ✅ LocalStorage से todos load
   const [todos, setTodos] = useState(() => {
     const savedTodos = localStorage.getItem("todos");
     return savedTodos ? JSON.parse(savedTodos) : [];
@@ -22,12 +21,10 @@ function TodoApp() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
 
-  // ✅ todos को हर बदलाव पर LocalStorage में save करना
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todos));
   }, [todos]);
 
-  // CSS keyframes for vibrate animation
   const vibrateKeyframes = `
     @keyframes vibrate {
       0% { transform: translateX(0); }
@@ -42,22 +39,9 @@ function TodoApp() {
       90% { transform: translateX(-1px); }
       100% { transform: translateX(0); }
     }
-    
-    .vibrate-btn {
-      animation: vibrate 0.5s linear infinite both;
-      animation-delay: 2s;
-    }
-    
-    .vibrate-btn:hover {
-      animation: none;
-      transform: scale(1.05) translateY(-4px);
-    }
-
-    @media (max-width: 640px) {
-      .vibrate-btn:hover {
-        transform: scale(1.02) translateY(-2px);
-      }
-    }
+    .vibrate-btn { animation: vibrate 0.5s linear infinite both; animation-delay: 2s; }
+    .vibrate-btn:hover { animation: none; transform: scale(1.05) translateY(-4px); }
+    @media (max-width: 640px) { .vibrate-btn:hover { transform: scale(1.02) translateY(-2px); } }
   `;
 
   const addTodo = () => {
@@ -83,37 +67,22 @@ function TodoApp() {
     setError('');
   };
 
-  const deleteTodo = (id) => {
-    setTodos(todos.filter(todo => todo.id !== id));
-  };
+  const deleteTodo = (id) => setTodos(todos.filter(todo => todo.id !== id));
 
   const toggleStatus = (id) => {
     setTodos(todos.map(todo => {
       if (todo.id === id) {
-        let nextStatus;
-        switch (todo.status) {
-          case 'pending':
-            nextStatus = 'active';
-            break;
-          case 'active':
-            nextStatus = 'completed';
-            break;
-          case 'completed':
-            nextStatus = 'pending';
-            break;
-          default:
-            nextStatus = 'pending';
-        }
+        let nextStatus =
+          todo.status === 'pending' ? 'active' :
+          todo.status === 'active' ? 'completed' : 'pending';
         return { ...todo, status: nextStatus };
       }
       return todo;
     }));
   };
 
-  const startEdit = (id, text) => {
-    setEditingId(id);
-    setEditValue(text);
-  };
+  const startEdit = (id, text) => { setEditingId(id); setEditValue(text); };
+  const cancelEdit = () => { setEditingId(null); setEditValue(''); setEditError(''); };
 
   const saveEdit = (id) => {
     const trimmedEdit = editValue.trim();
@@ -127,116 +96,51 @@ function TodoApp() {
       setTimeout(() => setEditError(''), 3000);
       return;
     }
-    setTodos(todos.map(todo =>
-      todo.id === id ? { ...todo, text: trimmedEdit } : todo
-    ));
-    setEditingId(null);
-    setEditValue('');
-    setEditError('');
+    setTodos(todos.map(todo => todo.id === id ? { ...todo, text: trimmedEdit } : todo));
+    cancelEdit();
   };
 
-  const cancelEdit = () => {
-    setEditingId(null);
-    setEditValue('');
-    setEditError('');
-  };
+  const filteredTodos = todos.filter(todo =>
+    filter === 'pending' ? todo.status === 'pending' :
+    filter === 'active' ? todo.status === 'active' :
+    filter === 'completed' ? todo.status === 'completed' : true
+  );
 
-  const filteredTodos = todos.filter(todo => {
-    if (filter === 'pending') return todo.status === 'pending';
-    if (filter === 'active') return todo.status === 'active';
-    if (filter === 'completed') return todo.status === 'completed';
-    return true;
-  });
-
-  const pendingCount = todos.filter(todo => todo.status === 'pending').length;
-  const activeCount = todos.filter(todo => todo.status === 'active').length;
-  const completedCount = todos.filter(todo => todo.status === 'completed').length;
-
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-  };
+  const pendingCount = todos.filter(t => t.status === 'pending').length;
+  const activeCount = todos.filter(t => t.status === 'active').length;
+  const completedCount = todos.filter(t => t.status === 'completed').length;
 
   return (
     <>
       <style>{vibrateKeyframes}</style>
-      <div
-        className={`min-h-screen py-4 sm:py-8 px-3 sm:px-4 transition-all duration-500 ${
-          isDarkMode 
-            ? 'bg-gray-900' 
-            : 'bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50'
-        }`}
-      >
-        <div className={`max-w-xs sm:max-w-lg lg:max-w-2xl xl:max-w-3xl mx-auto rounded-2xl sm:rounded-3xl p-3 sm:p-6 shadow-2xl border transition-all duration-500 ${
-          isDarkMode
-            ? 'bg-gray-800/90 border-gray-700/50 backdrop-blur-sm'
-            : 'backdrop-blur-sm bg-white/80 border-white/30'
+      <div className={`min-h-screen py-4 px-3 transition-all duration-500 ${
+        isDarkMode ? 'bg-gray-900' : 'bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50'
+      }`}>
+        <div className={`max-w-3xl mx-auto rounded-2xl p-4 shadow-2xl border transition-all duration-500 ${
+          isDarkMode ? 'bg-gray-800/90 border-gray-700/50' : 'bg-white/80 border-white/30'
         }`}>
-
-          {/* Dark/Light Mode Toggle */}
-          <div className="flex justify-end mb-3 sm:mb-4">
+          <div className="flex justify-end mb-3">
             <button
-              onClick={toggleDarkMode}
-              className={`p-2 sm:p-3 rounded-full transition-all duration-300 transform hover:scale-110 active:scale-95 ${
-                isDarkMode
-                  ? 'bg-yellow-400 text-gray-900 hover:bg-yellow-300 shadow-lg hover:shadow-yellow-400/50'
-                  : 'bg-gray-800 text-white hover:bg-gray-700 shadow-lg hover:shadow-gray-800/50'
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              className={`p-2 rounded-full transition-all duration-300 transform hover:scale-110 ${
+                isDarkMode ? 'bg-yellow-400 text-gray-900' : 'bg-gray-800 text-white'
               }`}
-              title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             >
-              {isDarkMode ? (
-                <Sun className="w-5 h-5 sm:w-6 sm:h-6" />
-              ) : (
-                <Moon className="w-5 h-5 sm:w-6 sm:h-6" />
-              )}
+              {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
             </button>
           </div>
 
           <Header isDarkMode={isDarkMode} />
-
-          <AddTodoInput
-            inputValue={inputValue}
-            setInputValue={setInputValue}
-            addTodo={addTodo}
-            error={error}
-            setError={setError}
-            isDarkMode={isDarkMode}
-          />
-
-          <StatsAndFilters
-            pendingCount={pendingCount}
-            activeCount={activeCount}
-            completedCount={completedCount}
-            filter={filter}
-            setFilter={setFilter}
-            isDarkMode={isDarkMode}
-            showFilters={showFilters}
-            setShowFilters={setShowFilters}
-          />
-
-          <TodoList
-            filteredTodos={filteredTodos}
-            editingId={editingId}
-            editValue={editValue}
-            setEditValue={setEditValue}
-            editError={editError}
-            saveEdit={saveEdit}
-            cancelEdit={cancelEdit}
-            toggleStatus={toggleStatus}
-            startEdit={startEdit}
-            deleteTodo={deleteTodo}
-            isDarkMode={isDarkMode}
-          />
+          <AddTodoInput {...{ inputValue, setInputValue, addTodo, error, setError, isDarkMode }} />
+          <StatsAndFilters {...{ pendingCount, activeCount, completedCount, filter, setFilter, isDarkMode, showFilters, setShowFilters }} />
+          <TodoList {...{ filteredTodos, editingId, editValue, setEditValue, editError, saveEdit, cancelEdit, toggleStatus, startEdit, deleteTodo, isDarkMode }} />
 
           {completedCount > 0 && (
-            <div className="mt-4 sm:mt-6 text-center">
-              <button
-                onClick={() => setTodos(todos.filter(todo => todo.status !== 'completed'))}
-                className={`font-medium py-2 px-4 rounded-lg transition-colors duration-200 text-sm sm:text-base ${
-                  isDarkMode 
-                    ? 'text-red-400 hover:text-red-300 hover:bg-red-900/20' 
-                    : 'text-red-600 hover:text-red-700 hover:bg-red-50'
-                }`}
-              >
+            <div className="mt-4 text-center">
+              <button onClick={() => setTodos(todos.filter(t => t.status !== 'completed'))}
+                className={`py-2 px-4 rounded-lg text-sm ${
+                  isDarkMode ? 'text-red-400 hover:bg-red-900/20' : 'text-red-600 hover:bg-red-50'
+                }`}>
                 Clear {completedCount} completed task{completedCount !== 1 ? 's' : ''}
               </button>
             </div>
